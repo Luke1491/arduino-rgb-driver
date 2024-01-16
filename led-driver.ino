@@ -1,14 +1,16 @@
-#define czujnik1 7
-#define czujnik2 8
-#define kolor A0
-#define jasnosc A1
+#define sensor1 7
+#define sensor2 8
+#define color A0
+#define brightness A1
 byte redPin = 3;
 byte greenPin = 5;
 byte bluePin = 9;
-byte wyborKoloru = 0;
+byte colorChoice = 0;
+
 //********************************************************
-void zapalSchody(void);
-int ustawKolorLED(int ustawkolor);
+void lightStairs(void);
+int setLEDColor(int colorSetting);
+
 inline void setColor(byte red, byte green, byte blue)
 {
   analogWrite(redPin, red);
@@ -22,8 +24,8 @@ void setup()
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
-  pinMode(czujnik1, INPUT);
-  pinMode(czujnik2, INPUT);
+  pinMode(sensor1, INPUT);
+  pinMode(sensor2, INPUT);
   setColor(255, 0, 0); // red
   delay(2000);
   setColor(0, 255, 0); // green
@@ -40,64 +42,95 @@ void setup()
 //*********************************************************
 void loop()
 {
-  if (digitalRead(czujnik1) == LOW && digitalRead(czujnik2) == LOW) setColor(0, 0, 0);
-  else zapalSchody();
-}//koniec loop
+  if (digitalRead(sensor1) == LOW && digitalRead(sensor2) == LOW)
+    setColor(0, 0, 0);
+  else
+    lightStairs();
+} // end loop
 //*********************************************************
-void zapalSchody(void)
+void lightStairs(void)
 {
-  int odczytKoloru;
-  while (digitalRead(czujnik1) == HIGH)
+  int colorRead;
+  while (digitalRead(sensor1) == HIGH)
   {
-    int odczytKoloru = analogRead(kolor); //odczytaj wartosc z potencjometru 1
-    wyborKoloru = ustawKolorLED(odczytKoloru);
-    switch (wyborKoloru)
+    int colorRead = analogRead(color); // read value from potentiometer 1
+    colorChoice = setLEDColor(colorRead);
+    switch (colorChoice)
     {
-      case 0: setColor(255, 0, 0); break;
-      case 1: setColor(0, 255, 0); break;
-      case 2: setColor(0, 0, 255); break;
-      case 3: setColor(255, 255, 0); break;
-      case 4: setColor(80, 0, 80); break;
-      case 5: setColor(0, 255, 255); break;
-      case 6: setColor(100, 100, 100); break;
-    }//koniec switch
+    case 0:
+      setColor(255, 0, 0);
+      break;
+    case 1:
+      setColor(0, 255, 0);
+      break;
+    case 2:
+      setColor(0, 0, 255);
+      break;
+    case 3:
+      setColor(255, 255, 0);
+      break;
+    case 4:
+      setColor(80, 0, 80);
+      break;
+    case 5:
+      setColor(0, 255, 255);
+      break;
+    case 6:
+      setColor(100, 100, 100);
+      break;
+    } // end switch
     delay(200);
   }
   delay(50);
 
-  while (digitalRead(czujnik2) == HIGH)
+  while (digitalRead(sensor2) == HIGH)
   {
-    int odczytKoloru = analogRead(kolor); //odczytaj wartosc z potencjometru 1
-    wyborKoloru = ustawKolorLED(odczytKoloru);
-    switch (wyborKoloru)
+    int colorRead = analogRead(color); // read value from potentiometer 1
+    colorChoice = setLEDColor(colorRead);
+    switch (colorChoice)
     {
-      case 0: setColor(255, 0, 0); break;
-      case 1: setColor(0, 255, 0); break;
-      case 2: setColor(0, 0, 255); break;
-      case 3: setColor(255, 255, 0); break;
-      case 4: setColor(80, 0, 80); break;
-      case 5: setColor(0, 255, 255); break;
-      case 6: setColor(100, 100, 100); break;
-
-    }//koniec switch
+    case 0:
+      setColor(255, 0, 0);
+      break;
+    case 1:
+      setColor(0, 255, 0);
+      break;
+    case 2:
+      setColor(0, 0, 255);
+      break;
+    case 3:
+      setColor(255, 255, 0);
+      break;
+    case 4:
+      setColor(80, 0, 80);
+      break;
+    case 5:
+      setColor(0, 255, 255);
+      break;
+    case 6:
+      setColor(100, 100, 100);
+      break;
+    } // end switch
     delay(200);
-  }//koniec while
+  } // end while
   delay(50);
- 
-}//koniec zapalSchody
+} // end lightStairs
 //*********************************************************************
-int ustawKolorLED(int ustawkolor)
+int setLEDColor(int colorSetting)
 {
-  int kolor = 0; //zmienna zwracajaca wybrany kolor
-  if (ustawkolor >= 0 && ustawkolor < 150) return kolor = 0; //czerwony
-  if (ustawkolor >= 140 && ustawkolor < 290) return kolor = 1; //zielony
-  if (ustawkolor >= 290 && ustawkolor < 430) return kolor = 2; //nibieski
-  if (ustawkolor >= 430 && ustawkolor < 570) return kolor = 3; //żółty
-  if (ustawkolor >= 570 && ustawkolor < 710) return kolor = 4; //fioletowy
-  if (ustawkolor >= 710 && ustawkolor < 850) return kolor = 5; //morski
-  if (ustawkolor >= 850 && ustawkolor <= 1023) return kolor = 6; //biały
+  int color = 0; // variable returning the chosen color
+  if (colorSetting >= 0 && colorSetting < 150)
+    return color = 0; // red
+  if (colorSetting >= 140 && colorSetting < 290)
+    return color = 1; // green
+  if (colorSetting >= 290 && colorSetting < 430)
+    return color = 2; // blue
+  if (colorSetting >= 430 && colorSetting < 570)
+    return color = 3; // yellow
+  if (colorSetting >= 570 && colorSetting < 710)
+    return color = 4; // purple
+  if (colorSetting >= 710 && colorSetting < 850)
+    return color = 5; // aqua
+  if (colorSetting >= 850 && colorSetting <= 1023)
+    return color = 6; // white
 }
-
-
-
-
